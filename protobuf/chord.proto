@@ -1,0 +1,72 @@
+syntax = "proto2";
+
+message Node {
+  required fixed64 key = 1;
+  required fixed32 address = 2;
+  required uint32 port = 3;
+}
+
+// Notify
+message NotifyRequest {
+  required Node node = 1; // Not necessary, but doesn't hurt
+}
+message NotifyResponse {}
+
+// Find Successor
+message FindSuccessorRequest {
+  required fixed64 key = 1;
+}
+message FindSuccessorResponse {
+  required Node node = 1;
+}
+
+// Find Successor Recursive
+message rFindSuccReq {
+  required fixed64 key = 1;
+  required Node requester = 2;
+}
+message rFindSuccResp {
+  required fixed64 key = 1;
+  required Node node = 2;
+}
+
+// Get Predecessor
+message GetPredecessorRequest {}
+message GetPredecessorResponse {
+  required Node node = 1;
+}
+
+// Check Predecessor
+message CheckPredecessorRequest {}
+message CheckPredecessorResponse {}
+
+// Get Successor
+message GetSuccessorListRequest {}
+message GetSuccessorListResponse {
+  repeated Node successors = 1;
+}
+
+message ChordMessage {
+  required uint32 version = 1 [ default = 417 ];
+  optional int32 query_id = 14;
+  
+  oneof msg {
+    NotifyRequest notify_request = 2;
+    NotifyResponse notify_response = 3;
+
+    FindSuccessorRequest find_successor_request = 4;
+    FindSuccessorResponse find_successor_response = 5;
+
+    GetPredecessorRequest get_predecessor_request = 6;
+    GetPredecessorResponse get_predecessor_response = 7;
+
+    CheckPredecessorRequest check_predecessor_request = 8;
+    CheckPredecessorResponse check_predecessor_response = 9;
+
+    GetSuccessorListRequest get_successor_list_request = 10;
+    GetSuccessorListResponse get_successor_list_response = 11;
+
+    rFindSuccReq r_find_succ_req = 12;
+    rFindSuccResp r_find_succ_resp = 13;
+  }
+}
